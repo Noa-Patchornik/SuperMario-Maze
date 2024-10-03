@@ -8,71 +8,16 @@ import java.util.List;
 
 public class SearchableMaze implements ISearchable {
 
-    private Maze origionMaze;
-    private MazeState StartState;
-    private MazeState EndState;
-    private int[][] graph;
-
-    private int[][] isVisited;
+    private Maze origionMaze; //the origin maze
+    private MazeState StartState; //start position in the maze
+    private MazeState EndState; // end position in the maze
+    private int[][] isVisited; //matrix that represent if the cell is visited
 
     public SearchableMaze(Maze m){
         this.origionMaze=m;
         StartState = new MazeState(m.getStartPosition().getRowIndex(),m.getStartPosition().getColumnIndex());
         EndState= new MazeState(m.getGoalPosition().getRowIndex(),m.getGoalPosition().getColumnIndex());
         isVisited=new int[m.getRows()][m.getCols()];
-    }
-
-    public int [][] adaptMyMaze(){
-        int [][] graph = new int [origionMaze.getRows()][origionMaze.getCols()];
-        List<Integer> neigh;
-        for(int i=0;i< origionMaze.getRows();i++) {
-            for (int j = 0; j < origionMaze.getCols(); j++) {
-                if (origionMaze.getMaze()[i][j] == 0 || origionMaze.getMaze()[i][j] == 2 || origionMaze.getMaze()[i][j] == 3) {
-                    graph[i][j] = 1;
-                    neigh = GETALL0(origionMaze.getMaze(), i, j);
-                    for (int k = 0; k < neigh.size(); k++) {
-                        int tmp = neigh.get(k);
-                        switch (tmp) {
-                            case 1:
-                                graph[i - 1][j] = 1;
-                                break;
-                            case 2:
-                                graph[i][j + 1] = 1;
-                                break;
-                            case 3:
-                                graph[i + 1][j] = 1;
-                                break;
-                            case 4:
-                                graph[i][j - 1] = 1;
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-        this.graph=graph;
-        return graph;
-    }
-
-    private List<Integer> GETALL0(int[][] maze, int i, int j) {
-        List<Integer> all0 = new ArrayList<>();
-        if(i-1>=0) {
-            if(maze[i-1][j]==0 || maze[i-1][j]==2 || maze[i-1][j]==3)
-                all0.add(1);
-        }
-        if(i+1< maze.length) {
-            if(maze[i+1][j]==0 || maze[i+1][j]==2 || maze[i+1][j]==3)
-                all0.add(3);
-        }
-        if(j+1<maze[0].length) {
-            if (maze[i][j+1] == 0 || maze[i][j+1] == 2 || maze[i][j+1] == 3)
-                all0.add(2);
-        }
-        if(j-1>-0) {
-            if (maze[i][j - 1] == 0 || maze[i][j - 1] == 2 || maze[i][j - 1] == 3)
-                all0.add(4);
-        }
-        return all0;
     }
 
     @Override
@@ -86,20 +31,6 @@ public class SearchableMaze implements ISearchable {
     }
 
     @Override
-    public List<Position> getAllSuccessors(Position s) {
-        List <Position> listposition = s.getNeigh(origionMaze.getRows(), origionMaze.getCols(),origionMaze);
-        listposition = s.getvalidneigh(listposition,s.getRowIndex(),s.getColumnIndex(),origionMaze);
-        return listposition;
-    }
-
-    @Override
-    public void setSuccessor(AState n) {
-        if(n!=null){
-            n.setSuccessor((MazeState) n);
-        }
-    }
-
-    @Override
     public void setGoal(MazeState n) {
         if(n!=null){
             this.EndState = n;
@@ -107,14 +38,14 @@ public class SearchableMaze implements ISearchable {
     }
 
     /**
-     * The function get all the possible moves from a current state up, down, right, left and diagonal
+     * The function return all the possible moves from a current state up, down, right, left and diagonal
      * @param curr - the state the maze is at
      * @return the list of the possible moves from the state
      */
     public List<AState> getAllPossibleStates(AState curr){
         List<AState> ans;
         MazeState c = (MazeState) curr;
-        ans = isOkNotDiagonal(c); // get all the state not diagonal: up,down, right, left/
+        ans = isOkNotDiagonal(c); // get all the state not diagonal: up,down, right, left
         List<AState> ansDiagonal = isOkDiagonal(c); // get all the diagonal states
         //add the diagonal states to the list of no diagonal
         for(int i=0; i<ansDiagonal.size(); i++){
@@ -125,7 +56,7 @@ public class SearchableMaze implements ISearchable {
     }
 
     /**
-     * The function that get the diagonal possible moves from the state
+     * The function return the diagonal possible moves from the state
      * @param c - the current state in the maze
      * @return - the list of the diagonal moves
      */
@@ -134,9 +65,10 @@ public class SearchableMaze implements ISearchable {
         int row= c.getR();
         int col = c.getC();
         MazeState tmp;
-        //checks if the move is not out of the bounds of the maze, if we didn't visit there and if there is no wall there
+        /** up left */
+        //checks if the move is not out of the bounds of the maze, if the cell is 0 (not wall) and if the cell isn't visited
         if(isLegalMove(row-1,col-1) && getCellMaze(row-1,col-1) && this.isVisited[row-1][col-1]==0){
-            //checking if the cells next to the current are 0 too so there would be a way in diagonal
+            //checking if the cells next to the current are 0 too so there would be a way in diagonal (up or left)
             if(getCellMaze(row-1,col) || getCellMaze(row,col-1)){
                 //checks if the cells next to current wasn't visited already
                 if(this.isVisited[row-1][col]==0 || this.isVisited[row][col-1]==0){
@@ -144,26 +76,30 @@ public class SearchableMaze implements ISearchable {
                     tmp = new MazeState(row-1,col-1);
                     tmp.setCost(15);
                     diagonalstate.add(tmp);
+                    //remark the cell as visited
                     this.isVisited[row - 1][col-1] = 1;
                 }
             }
         }
-        //checks if the move is not out of the bounds of the maze, if we didn't visit there and if there is no wall there
+        /** down right */
+        //checks if the move is not out of the bounds of the maze, if the cell is 0 (not wall) and if the cell isn't visited
         if(isLegalMove(row+1,col+1) && getCellMaze(row+1,col+1) && this.isVisited[row+1][col+1]==0){
             //checking if the cells next to the current are 0 too so there would be a way in diagonal
             if(getCellMaze(row+1,col) || getCellMaze(row,col+1)){
                 //checks if the cells next to current wasn't visited already
                 if(this.isVisited[row+1][col]==0 || this.isVisited[row][col+1]==0){
-                    //making a new state, set the cost of diagonal as 15 and add to the list
+                    //making new state, set the cost of diagonal as 15 and add to the list
                     tmp = new MazeState(row+1,col+1);
                     tmp.setCost(15);
                     diagonalstate.add(tmp);
+                    //remark the cell as visited
                     this.isVisited[row + 1][col+1] = 1;
                 }
             }
         }
-        //checks if the move is not out of the bounds of the maze, if we didn't visit there and if there is no wall there
-        if(isLegalMove(row-1,col+1) && getCellMaze(row-1,col+1) && this.isVisited[row-1][col+1]==0){            //checking if the cells next to the current are 0 too so there would be a way in diagonal
+        /** up right */
+        //checks if the move is not out of the bounds of the maze, if the cell is 0 (not wall) and if the cell isn't visited
+        if(isLegalMove(row-1,col+1) && getCellMaze(row-1,col+1) && this.isVisited[row-1][col+1]==0){
             //checking if the cells next to the current are 0 too so there would be a way in diagonal
             if(getCellMaze(row-1,col) || getCellMaze(row,col+1)){
                 //checks if the cells next to current wasn't visited already
@@ -172,11 +108,13 @@ public class SearchableMaze implements ISearchable {
                     tmp = new MazeState(row-1,col+1);
                     tmp.setCost(15);
                     diagonalstate.add(tmp);
+                    //remark the cell as visited
                     this.isVisited[row - 1][col+1] = 1;
                 }
             }
         }
-        //checks if the move is not out of the bounds of the maze, if we didn't visit there and if there is no wall there
+        /** down left */
+        //checks if the move is not out of the bounds of the maze, if the cell is 0 (not wall) and if the cell isn't visited
         if(isLegalMove(row+1,col-1) && getCellMaze(row+1,col-1) && this.isVisited[row+1][col-1]==0){
             //checking if the cells next to the current are 0 too so there would be a way in diagonal
             if(getCellMaze(row+1,col) || getCellMaze(row,col-1)){
@@ -186,6 +124,7 @@ public class SearchableMaze implements ISearchable {
                     tmp = new MazeState(row+1,col-1);
                     tmp.setCost(15);
                     diagonalstate.add(tmp);
+                    //remark the cell as visited
                     this.isVisited[row + 1][col-1] = 1;
                 }
             }
@@ -194,6 +133,7 @@ public class SearchableMaze implements ISearchable {
         return diagonalstate;
     }
 
+    //return true if the cell of the maze is not wall. meaning 0 or the start point or the end point, else return false
     public boolean getCellMaze(int row, int col) {
         if(origionMaze.getCellMaze(row,col)==0 || origionMaze.getCellMaze(row,col)==2 ||origionMaze.getCellMaze(row,col)==3)
             return true;
@@ -201,7 +141,7 @@ public class SearchableMaze implements ISearchable {
     }
 
     /**
-     * The function gets all the NOT diagonal moves that can be from the current one, up,down,right,left
+     * The function return all the NOT diagonal moves that is legal from the current one, up,down,right,left
      * @param curr - the current state in the maze
      * @return - the list of all the not diagonal possible moves
      */
@@ -211,53 +151,61 @@ public class SearchableMaze implements ISearchable {
         MazeState tmp;
         int row = c.getR();
         int col = c.getC();
+        /** up */
         //check if the move is in the bounds of the maze and check if the cell wasn't already visited
-        if(isLegalMove(row-1,col) && this.isVisited[row-1][col]==0)
+        if(isLegalMove(row-1,col) && this.isVisited[row-1][col]==0) {
             //check if the cell from the original maze is 0/2/3, so it is possible move
-            if(getCellMaze(row-1,col)) {
+            if (getCellMaze(row - 1, col)) {
                 //add the state to the list of possible moves, set the cell as visited
-                tmp = new MazeState(row-1,col);
+                tmp = new MazeState(row - 1, col);
                 tmp.setCost(10);
                 ans.add(tmp);
+                //remark as visited
                 this.isVisited[row - 1][col] = 1;
             }
-
+        }
+        /** down */
         //check if the move is in the bounds of the maze, check if the cell wasn't already visited
-        if(isLegalMove(row+1,col) && this.isVisited[row+1][col]==0)
+        if(isLegalMove(row+1,col) && this.isVisited[row+1][col]==0) {
             //check if the cell from the original maze is 0/2/3, so it is possible move
-            if(getCellMaze(row+1,col)) {
+            if (getCellMaze(row + 1, col)) {
                 //add the state to the list of possible moves, set the cell as visited
-                tmp = new MazeState(row+1,col);
+                tmp = new MazeState(row + 1, col);
                 tmp.setCost(10);
                 ans.add(tmp);
-                this.isVisited[row+ 1][col] =1;
+                this.isVisited[row + 1][col] = 1;
             }
+        }
+        /** left */
         //check if the move is in the bounds of the maze, check if the cell wasn't already visited
-        if(isLegalMove(row,col-1) && this.isVisited[row][col-1]==0)
+        if(isLegalMove(row,col-1) && this.isVisited[row][col-1]==0) {
             //check if the cell from the original maze is 0/2/3, so it is possible move
-            if(getCellMaze(row,col-1)) {
+            if (getCellMaze(row, col - 1)) {
                 //add the state to the list of possible moves, set the cell as visited
-                tmp = new MazeState(row,col-1);
+                tmp = new MazeState(row, col - 1);
                 tmp.setCost(10);
                 ans.add(tmp);
                 this.isVisited[row][col - 1] = 1;
             }
+        }
+        /** right */
         //check if the move is in the bounds of the maze, check if the cell wasn't already visited
-        if(isLegalMove(row,col+1) && this.isVisited[row][col+1]==0)
+        if(isLegalMove(row,col+1) && this.isVisited[row][col+1]==0) {
             //check if the cell from the original maze is 0/2/3, so it is possible move
-            if(getCellMaze(row,col+1)){
+            if (getCellMaze(row, col + 1)) {
                 //add the state to the list of possible moves, set the cell as visited
-                tmp = new MazeState(row,col+1);
+                tmp = new MazeState(row, col + 1);
                 tmp.setCost(10);
                 ans.add(tmp);
-                this.isVisited[row][col + 1] =1;
+                this.isVisited[row][col + 1] = 1;
             }
-        //return the list of possible move that not visited, and can be visited from the current state
+        }
+        //return the list of possible moves that not visited, and can be visited from the current state
         return ans;
     }
 
     /**
-     * The function gets row and col and checks if the numbers are in the maze bounds
+     * The function gets row and col and checks if it is in the maze bounds
      * @param row - the row of the state
      * @param col - the col of the state
      * @return - true if it is in the bounds, false else
@@ -280,13 +228,14 @@ public class SearchableMaze implements ISearchable {
         }
     }
 
-
+    //the function set a state to visited
     public void setIsVisited(AState state){
         if(state!=null && isLegalMove(((MazeState)state).getR(),((MazeState)state).getC())){
             this.isVisited[((MazeState)state).getR()][((MazeState)state).getC()]=1;
         }
     }
 
+    // the function checks if the cell is not visited return true, else return false
     public boolean getIsCellVisited(AState state){
         if(state!=null){
             if(this.isVisited[((MazeState)state).getR()][((MazeState)state).getC()]==0){

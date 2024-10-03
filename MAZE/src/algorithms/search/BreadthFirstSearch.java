@@ -15,23 +15,21 @@ public class BreadthFirstSearch extends ASearchingAlgorithm implements ISearchin
     @Override
     public Solution solve(ISearchable s) {
         Queue<AState> myqueue = new LinkedList<>();
+        this.numberOfNodes = 0;
         ArrayList<AState> ans = BFS(s, myqueue);
 
-        if(s!=null) {
-
-            while (ans == null) {
-                this.numberOfNodes = 0;
-                ((SearchableMaze) s).isVisitedReset();
-                ans = BFS(s, myqueue);
-            }
-            Solution sol = new Solution(ans);
-            return sol;
+        while (ans == null) {
+            this.numberOfNodes = 0;
+            ((SearchableMaze) s).isVisitedReset();
+            ans = BFS(s, myqueue);
         }
-        return new Solution(ans);
+        Solution sol = new Solution(ans);
+        return sol;
     }
 
+    //the BFS function that search in the maze the end state with a queue
     protected ArrayList<AState> BFS(ISearchable s, Queue<AState> myqueue) {
-        // Create a queue for BFS
+        //Create a queue for BFS
         List<AState> visited = new ArrayList<>();
 
         // Mark the current node as visited and enqueue it
@@ -68,10 +66,8 @@ public class BreadthFirstSearch extends ASearchingAlgorithm implements ISearchin
                     traversal= getSolution(tmp);
                     return traversal;
                 }
-
             }
         }
         return null;
     }
-
 }

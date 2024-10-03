@@ -6,7 +6,7 @@ import java.util.List;
 public class RunSearchOnMaze {
     public static void main(String[] args) {
         IMazeGenerator mg = new MyMazeGenerator();
-        Maze maze = mg.generate(8, 100);
+        Maze maze = mg.generate(20, 30);
 
         maze.print();
 

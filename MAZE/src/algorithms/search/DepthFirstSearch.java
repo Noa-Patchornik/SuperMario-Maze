@@ -28,6 +28,7 @@ public class DepthFirstSearch extends ASearchingAlgorithm{
         return new Solution(ans);
     }
 
+    //the DFS function that search the end state in the maze
     public ArrayList<AState> DFS(AState init,ISearchable s,AState goal)
     {
         MazeState n;
@@ -65,16 +66,4 @@ public class DepthFirstSearch extends ASearchingAlgorithm{
         }
         return null;
     }
-
-    private void PrintList(ArrayList<AState> traversal) {
-        for(int i=0;i<traversal.size();i++)
-            System.out.print ("  " + ((MazeState)traversal.get(i)).getR() + "," + ((MazeState)traversal.get(i)).getC());
-        System.out.println();
-    }
-
-    @Override
-    public int getNumberOfVisitedNodes() {
-        return this.numberOfNodes;
-    }
-
 }

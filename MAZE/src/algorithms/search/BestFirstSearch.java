@@ -12,7 +12,7 @@ public class BestFirstSearch extends BreadthFirstSearch {
         this.numberOfNodes = 0;
     }
 
-
+    //the function compare between 2 A state so the Best algorithm would now which one to choose in the priority queue
     private static class mycompar implements Comparator<AState> {
         @Override
         public int compare(AState s1, AState s2) {
@@ -55,7 +55,6 @@ public class BestFirstSearch extends BreadthFirstSearch {
         List<AState> tmpneigh = new ArrayList<>();
         ArrayList<AState> traversal = new ArrayList<>();
         // sorting in pq gets done by first value of pair
-
         while (!myqueue.isEmpty()) {
             MazeState curr =(MazeState) myqueue.poll();
 

@@ -16,11 +16,6 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
     }
 
     @Override
-    public int getNumberOfVisitedNodes() {
-        return 0;
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -30,6 +25,7 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
         return this.numberOfNodes;
     }
 
+    //get the path from the start state to the end state
     public ArrayList<AState> getSolution(AState n) {
         ArrayList<AState> sol = new ArrayList<>();
         Stack<AState> stackSol = new Stack<>();

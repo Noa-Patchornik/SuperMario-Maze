@@ -21,7 +21,6 @@ public abstract class AState{
         successor=n;
     }
 
-
     public AState getSuccessor() {
         return  this.successor;
     }

@@ -6,11 +6,7 @@ import java.util.List;
 
 public interface ISearchable {
 
-    public MazeState getInitState();
-    public MazeState getGoalState();
-    public List<Position> getAllSuccessors(Position s);
-
-    void setSuccessor(AState n);
-
+    MazeState getInitState();
+    MazeState getGoalState();
     void setGoal(MazeState n);
 }

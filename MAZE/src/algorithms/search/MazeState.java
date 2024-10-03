@@ -4,13 +4,11 @@ public class MazeState extends AState  {
     private int r;
     private int c;
 
-
     public MazeState(int r, int c) {
         super();
         this.r = r;
         this.c = c;
     }
-
 
     public int getR() {
         return r;
