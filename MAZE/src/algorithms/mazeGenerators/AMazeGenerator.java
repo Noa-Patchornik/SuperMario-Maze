@@ -93,6 +93,7 @@ public abstract class AMazeGenerator implements IMazeGenerator {
                 }
             }
         }
+        maze.setMaze(maze.getGoalPosition().getRowIndex(),maze.getGoalPosition().getColumnIndex(),0);
         return maze;
     }
 
