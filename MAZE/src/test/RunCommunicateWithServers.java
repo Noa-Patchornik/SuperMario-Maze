@@ -21,19 +21,20 @@ public class RunCommunicateWithServers {
 //Initializing servers
         Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
         Server solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
-//Server stringReverserServer = new Server(5402, 1000, new ServerStrategyStringReverser();
+
 //Starting servers
-        solveSearchProblemServer.start();
         mazeGeneratingServer.start();
-//stringReverserServer.start();
+        solveSearchProblemServer.start();
+
+
 //Communicating with servers
         CommunicateWithServer_MazeGenerating();
         CommunicateWithServer_SolveSearchProblem();
-//CommunicateWithServer_StringReverser();
+
 //Stopping all servers
         mazeGeneratingServer.stop();
         solveSearchProblemServer.stop();
-//stringReverserServer.stop();
+
     }
     private static void CommunicateWithServer_MazeGenerating() {
         try {
@@ -47,10 +48,10 @@ public class RunCommunicateWithServers {
                         int[] mazeDimensions = new int[]{50, 50};
                         toServer.writeObject(mazeDimensions); //send maze dimensions to server
                         toServer.flush();
-                        byte[] compressedMaze = (byte[]) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
+                        byte[] compressedMaze = (byte[]) fromServer.readObject(); //read generated maze (compressed with SimpleCompressor) from server
                         InputStream is = new SimpleDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
-                        byte[] decompressedMaze = new byte[10000000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
-                        is.read(decompressedMaze); //Fill decompressedMazewith bytes
+                        byte[] decompressedMaze = new byte[10000000 /*CHANGE SIZE ACCORDING TO YOUR MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
+                        is.read(decompressedMaze); //Fill decompressedMaze with bytes
                         Maze maze = new Maze(decompressedMaze);
                         maze.print();
                     } catch (Exception e) {
@@ -77,9 +78,9 @@ public class RunCommunicateWithServers {
                         maze.print();
                         toServer.writeObject(maze); //send maze to server
                         toServer.flush();
-                        Solution mazeSolution = (Solution) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
-
-//Print Maze Solution retrieved from the server
+                        //read generated maze (compressed with SimpleCompressor) from server
+                        Solution mazeSolution = (Solution) fromServer.readObject();
+                        //Print Maze Solution retrieved from the server
                         System.out.println(String.format("Solution steps: %s", mazeSolution));
                         ArrayList<AState> mazeSolutionSteps = mazeSolution.getSolutionPath();
                         for (int i = 0; i < mazeSolutionSteps.size(); i++) {
@@ -95,32 +96,6 @@ public class RunCommunicateWithServers {
             e.printStackTrace();
         }
     }
-    private static void CommunicateWithServer_StringReverser() {
-        try {
-            Client client = new Client(InetAddress.getLocalHost(), 5402, new IClientStrategy() {
-                @Override
-                public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
-                    try {
-                        BufferedReader fromServer = new BufferedReader(new InputStreamReader(inFromServer));
-                        PrintWriter toServer = new PrintWriter(outToServer);
 
-                        String message = "Client Message";
-                        String serverResponse;
-                        toServer.write(message + "\n");
-                        toServer.flush();
-                        serverResponse = fromServer.readLine();
-                        System.out.println(String.format("Server response: %s", serverResponse));
-                        toServer.flush();
-                        fromServer.close();
-                        toServer.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            client.communicateWithServer();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

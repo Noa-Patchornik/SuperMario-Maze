@@ -10,35 +10,17 @@ public class Configurations {
 
     private Configurations() {
         prop = new Properties();
-        File configFile = new File("resources/config.properties");
-        //if the configuration file is empty, put the default settings
-        if (configFile.length() == 0) {
-            try (OutputStream output = new FileOutputStream(configFile)) {
-                //set the properties: thread pool size, generate strategy, search strategy
-                prop.setProperty("threadPoolSize", "5");
-                prop.setProperty("mazeGeneratingAlgorithm", "MyMazeGenerator");
-                prop.setProperty("mazeSearchingAlgorithm", "DepthFirstSearch");
-//                prop.setProperty("CompressorType", "MyCompressorOutputStream");
-                //keep the setting to the file
-                prop.store(output, null);
-            } catch (IOException io) {
-                io.printStackTrace();
+        try {
+            InputStream input = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
+            if (input != null) {
+                prop.load(input);
+            } else {
+                System.out.println("File not found");
             }
-        }
-        //if the file is not empty, load the data from it
-        else{
-            try {
-                InputStream input = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
-                if (input != null) {
-                    prop.load(input);
-                } else {
-                    System.out.println("File not found");
-                }
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

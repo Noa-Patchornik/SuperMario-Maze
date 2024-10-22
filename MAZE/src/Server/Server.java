@@ -1,10 +1,8 @@
 package Server;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.security.PublicKey;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 public class Server {
@@ -25,28 +23,28 @@ public class Server {
     }
 
     public void start(){
-        new Thread(()->{startServer();}).start();
+        new Thread(()->
+            startServer()).start();
     }
 
     public void startServer() {
         try {
-            ServerSocket serverSocket = new ServerSocket(this.port);
-            serverSocket.setSoTimeout(this.listeningIntervalMS);
+            ServerSocket serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(listeningIntervalMS);
             while(!stop) {
                 try {
                     Socket clientsocket = serverSocket.accept();
                     //thread from thread pool to handle new client
-                    this.threadPool.submit(() ->
+                    threadPool.submit(() ->
                         handleClient(clientsocket));
                 }
                 catch (SocketTimeoutException e){
-                    System.out.println("Socket timed out");
+
                     stop();
                 }
-                serverSocket.close();
-                threadPool.shutdown();
-
             }
+            serverSocket.close();
+            threadPool.shutdown();
         }catch (IOException e) {
             e.printStackTrace();
             stop();
@@ -58,9 +56,7 @@ public class Server {
             this.serverStrategy.serverstrategy(clientsocket.getInputStream(), clientsocket.getOutputStream());
             clientsocket.close();
         }catch (IOException e){
-
         }
-
     }
 
     public void stop() {
