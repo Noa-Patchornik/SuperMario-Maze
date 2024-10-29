@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import View.*?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="New" />
+                        <MenuItem mnemonicParsing="false" onAction="#openExistingMaze" text="Open…" />
+                        <Menu mnemonicParsing="false" text="Open Recent" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem mnemonicParsing="false" text="Save" />
+                        <MenuItem mnemonicParsing="false" text="Save As…" />
+                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Preferences…" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Quit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#Help" text="About MazeApp" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="398.0" prefWidth="675.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label fx:id="rowlbl" layoutX="10.0" layoutY="49.0" text="Number of Rows" />
+                <Label fx:id="collbl" layoutX="14.0" layoutY="99.0" text="Number of Columns" />
+                <Button fx:id="generateMazeButton" layoutX="14.0" layoutY="187.0" mnemonicParsing="false" onAction="#generateMaze" text="Generate Maze" />
+                <Button fx:id="solveMazeButton" layoutX="16.0" layoutY="258.0" mnemonicParsing="false" onAction="#solveMaze" text="Solve Maze" />
+                <TextField fx:id="txtFldRow" layoutX="10.0" layoutY="67.0" promptText="enter number of rows" />
+                <TextField fx:id="txtFldCol" layoutX="10.0" layoutY="117.0" promptText="enter number of cols" />
+                <ComboBox fx:id="myComboBox" layoutX="14.0" layoutY="153.0" prefHeight="25.0" prefWidth="190.0" promptText="choose wanted generation" />
+                <MazeDisplayer fx:id="mazeDisplayer" height="500.0" imageFileNamePlayer="MAZE/resources/images/mario.jpg" imageFileNameWall="MAZE/resources/images/wall.png" imageFileNameWinner="MAZE/resources/SolvedMaze.png" layoutX="254.0" layoutY="27.0" onKeyPressed="#keyPressed" onMouseClicked="#clickOnMazeformoving" width="500.0" />
+                <ComboBox fx:id="myComboBox2" layoutX="15.0" layoutY="220.0" prefHeight="25.0" prefWidth="190.0" promptText="choose wanted solving" />
+                <Label layoutX="10.0" layoutY="7.0" text="Welcom to Maze app" textAlignment="CENTER" textFill="#df2323">
+               <font>
+                  <Font name="David Bold" size="28.0" />
+               </font>
+            </Label>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

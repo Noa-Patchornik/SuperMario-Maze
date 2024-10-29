@@ -11,7 +11,7 @@ public class SearchableMaze implements ISearchable {
     private Maze origionMaze; //the origin maze
     private MazeState StartState; //start position in the maze
     private MazeState EndState; // end position in the maze
-    private int[][] isVisited; //matrix that represent if the cell is visited
+    public int[][] isVisited; //matrix that represent if the cell is visited
 
     public SearchableMaze(Maze m){
         this.origionMaze=m;
@@ -243,5 +243,9 @@ public class SearchableMaze implements ISearchable {
             }
         }
         return false;
+    }
+
+    public Maze getOrigionMaze() {
+        return this.origionMaze;
     }
 }

@@ -7,6 +7,8 @@ public class Solution implements Serializable {
 
     private ArrayList<AState> traversal=null;
 
+    public Solution(){
+    }
     public Solution(ArrayList<AState> ans){
         this.traversal= ans;
     }

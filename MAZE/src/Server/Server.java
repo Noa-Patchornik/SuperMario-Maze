@@ -38,8 +38,7 @@ public class Server {
                     threadPool.submit(() ->
                         handleClient(clientsocket));
                 }
-                catch (SocketTimeoutException e){
-
+                catch(SocketTimeoutException e){
                     stop();
                 }
             }
