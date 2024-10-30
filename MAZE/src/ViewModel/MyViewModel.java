@@ -15,15 +15,28 @@ public class MyViewModel extends Observable implements Observer {
 
     private IModel model;
     private int [][] maze;
-    private int rowChar;
-    private int colChar;
     private IntegerProperty playerRow = new SimpleIntegerProperty();
     private IntegerProperty playerCol = new SimpleIntegerProperty();
 
+
+    public MyViewModel(IModel model) {
+        this.model = model;
+        this.model.assignObserver(this);
+        this.maze = null;
+    }
+
+    /**
+     * the binding between the row position of the player and the view
+     * @return
+     */
     public IntegerProperty playerRowProperty() {
         return playerRow;
     }
 
+    /**
+     * the binding between the col position of the player and the view
+     * @return
+     */
     public IntegerProperty playerColProperty() {
         return playerCol;
     }
@@ -44,31 +57,8 @@ public class MyViewModel extends Observable implements Observer {
         return playerCol.get();
     }
 
-
-
-    public void setPlayerPosition(int row, int col) {
-        this.playerRow.set(row);
-        this.playerCol.set(col);
-    }
-
-    public MyViewModel(IModel model) {
-        this.model = model;
-        this.model.assignObserver(this);
-        this.maze = null;
-    }
-
-
     public int[][] getMaze() {
         return maze;
-    }
-
-
-    public int getRowChar() {
-        return rowChar;
-    }
-
-    public int getColChar() {
-        return colChar;
     }
 
     @Override
@@ -83,10 +73,14 @@ public class MyViewModel extends Observable implements Observer {
         return this.model.generateRandomMaze(row,col,selectedSearchable);
     }
 
+    /**
+     * the function get the key event that happened and change the key code to int and send it to the model,
+     * update the position of the player and notify the observers of the ViewModel class
+     * @param keyEvent
+     */
     public void moveCharacter(KeyEvent keyEvent)
     {
         int direction = -1;
-
         switch (keyEvent.getCode()){
             case UP:
                 direction = 1;

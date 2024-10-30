@@ -49,9 +49,6 @@ public class MazeDisplayer extends Canvas {
         this.imageFileNamePlayer.set(imageFileNamePlayer);
     }
 
-
-
-
     public int getRow_player() {
         return row_player;
     }
@@ -69,8 +66,10 @@ public class MazeDisplayer extends Canvas {
     }
 
 
-
-
+    /**
+     * draw the maze, update the start position of the player
+     * @param searchable
+     */
     public void drawMaze(ISearchable searchable)
     {
         this.searchable = searchable;
@@ -81,6 +80,9 @@ public class MazeDisplayer extends Canvas {
         draw();
     }
 
+    /**
+     * the function that draw the walls player and the princess and the end of the maze
+     */
     public void draw()
     {
         if( maze!=null) {
@@ -145,12 +147,18 @@ public class MazeDisplayer extends Canvas {
             }
             graphicsContext.drawImage(princesImage, w_princes, h_princes, cellWidth, cellHeight);
 
-            graphicsContext.setStroke(Color.BLACK); // צבע המסגרת
+            graphicsContext.setStroke(Color.DARKSALMON); // צבע המסגרת
             graphicsContext.setLineWidth(10); // עובי המסגרת
             graphicsContext.strokeRect(0, 0, this.getWidth(), this.getHeight()); // ציור המסגרת מסביב למבוך
         }
     }
 
+    /**
+     * function that get called if the player moved, update the location of it and call the function that
+     * draw the walls and player and princess
+     * @param row
+     * @param col
+     */
     public void setPlayerPosition(int row, int col) {
         this.row_player = row;
         this.col_player = col;
