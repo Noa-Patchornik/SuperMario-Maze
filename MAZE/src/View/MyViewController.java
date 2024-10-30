@@ -118,7 +118,10 @@ public class MyViewController implements Initializable,Observer {
      * @param keyEvent
      */
     public void keyPressed(KeyEvent keyEvent) {
-        viewModel.moveCharacter(keyEvent);
+        if(!(this.searchable.getGoalState().getR() == this.viewModel.getPlayerRow() &&
+        this.searchable.getGoalState().getC() == this.viewModel.getPlayerCol())){
+            viewModel.moveCharacter(keyEvent);
+        }
         keyEvent.consume();
     }
 

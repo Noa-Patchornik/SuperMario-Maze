@@ -10,18 +10,40 @@ public class Configurations {
 
     private Configurations() {
         prop = new Properties();
-        try {
-            InputStream input = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
-            if (input != null) {
-                prop.load(input);
-            } else {
-                System.out.println("File not found");
+        loadConfig();
+    }
+
+    private void loadConfig() {
+        File configFile = new File("Maze/resources/config.properties");
+        if (configFile.length() == 0) {
+            try (OutputStream output = new FileOutputStream(configFile)) {
+                prop.setProperty("threadPoolSize", "10");
+                prop.setProperty("mazeGeneratingAlgorithm", "MyMazeGenerator");
+                prop.setProperty("mazeSearchingAlgorithm", "BestFirstSearch");
+                prop.setProperty("CompressorType", "MyCompressorOutputStream");
+                prop.store(output, null);
+            } catch (IOException io) {
+                io.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } else {
+            try (InputStream input = new FileInputStream(configFile)) {
+                prop.load(input);
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
         }
+//        try {
+//            InputStream input = Configurations.class.getClassLoader().getResourceAsStream("config.properties");
+//            if (input != null) {
+//                prop.load(input);
+//            } else {
+//                System.out.println("File not found");
+//            }
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     //the public function that check if there is an instance of this class return it, else creat new one and then return it
