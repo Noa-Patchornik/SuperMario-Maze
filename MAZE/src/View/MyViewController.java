@@ -9,9 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -22,6 +27,8 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 public class MyViewController implements Initializable,Observer {
+    public MediaView mediaView;
+    private MediaPlayer mediaPlayer;
     private MyViewModel viewModel;
     @FXML
     public TextField textField_mazeRows;
@@ -136,8 +143,16 @@ public class MyViewController implements Initializable,Observer {
             case "Generate Maze" -> mazeGenerated();
             case "player moved" -> playerMoved();
             case "maze solved" -> mazeSolved();
+            case "Goal State" -> solvingTheMaze();
             default -> System.out.println("Not implemented change: " + change);
         }
+    }
+
+    /**
+     * the function notify to the client that he succeeded to solve the maze
+     */
+    private void solvingTheMaze() {
+        playWinAnimation();
     }
 
     /**
@@ -157,6 +172,8 @@ public class MyViewController implements Initializable,Observer {
      * draw the new maze that was generated and initialize the start position of the player
      */
     private void mazeGenerated() {
+        // Stop any playing video first
+        stopWinAnimation();
         this.mazeDisplayer.drawMaze(this.searchable);
         int startRow = this.searchable.getInitState().getR();
         int startCol = this.searchable.getInitState().getC();
@@ -202,10 +219,6 @@ public class MyViewController implements Initializable,Observer {
         showCustomAlert("לפניך אפליקציה ליצירת מבוכים ופתרונם מבוססת אלגוריתמים שונים. יש שימוש באסטרטגיית Strategy כדי לתמוך בבחירה בזמן ריצה של אלגוריתמים שונים.");
     }
 
-
-    public void ProperyChange(ActionEvent actionEvent) {
-    }
-
     /**
      * the function shows alert to the client with explanation of how the app is working and how to use it
      * @param actionEvent
@@ -237,27 +250,51 @@ public class MyViewController implements Initializable,Observer {
      * @param actionEvent
      */
     public void generateNewMaze(ActionEvent actionEvent) {
+        // Stop any playing video first
+        stopWinAnimation();
         this.selectedValueSearchable = "MyMaze";
         this.selectedValueSearching = "Depth First Search";
         generateMaze();
     }
 
+    /**
+     * the function that play the GIF of mario after the client solve the maze
+     */
+    public void playWinAnimation() {
+        try {
+            // Get the absolute path of the project directory
+            String projectDir = System.getProperty("user.dir");
+            String videoPath = projectDir + "/MAZE/resources/images/GIF.mp4";
+            File videoFile = new File(videoPath);
+            if (!videoFile.exists()) {
+                // Try alternative path
+                videoPath = projectDir + "/MAZE/images/GIF.mp4";
+                videoFile = new File(videoPath);
+            }
+            Media media = new Media(videoFile.toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaView.setMediaPlayer(mediaPlayer);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Error playing video: " + e.getMessage());
+        }
+    }
 
-//    public String get_update_player_position_row() {
-//        return update_player_position_row.get();
-//    }
-//
-//    public void set_update_player_position_row(String update_player_position_row) {
-//        this.update_player_position_row.set(update_player_position_row);
-//    }
-//
-//    public String get_update_player_position_col() {
-//        return update_player_position_col.get();
-//    }
-//
-//    public void set_update_player_position_col(String update_player_position_col) {
-//        this.update_player_position_col.set(update_player_position_col);
-//    }
+    /**
+     * the function stop all the animation so the client could generate new maze
+     */
+    public void stopWinAnimation() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose(); // This releases resources
+            mediaPlayer = null;    // Clear the reference
+        }
+        if (mediaView != null) {
+            mediaView.setMediaPlayer(null); // Clear the media view
+        }
+    }
+
 }
 
 

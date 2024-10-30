@@ -62,6 +62,10 @@ public class MyModel extends Observable implements IModel{
                     colChar++;
                 }
         }
+        if(rowChar== this.searchable.getGoalState().getR() && colChar == this.searchable.getGoalState().getC()){
+            setChanged();
+            notifyObservers("Goal State");
+        }
     }
 
     public int getRowChar() {
@@ -106,13 +110,19 @@ public class MyModel extends Observable implements IModel{
      */
     public ISearchable generateRandomMaze(int row, int col,String selectedSearchable)
     {
-        this.mymaze = new Maze(row,col);
-        AMazeGenerator typeToGenerate = switch (selectedSearchable) {
-            case "simpleMaze" -> new SimpleMazeGenerator();
-            case "emptyMaze" -> new EmptyMazeGenerator();
-            case "MyMaze" -> new MyMazeGenerator();
-            default -> new MyMazeGenerator();
-        };
+        AMazeGenerator typeToGenerate ;
+                this.mymaze = new Maze(row,col);
+        if(selectedSearchable!=null) {
+            typeToGenerate = switch (selectedSearchable) {
+                case "simpleMaze" -> new SimpleMazeGenerator();
+                case "emptyMaze" -> new EmptyMazeGenerator();
+                case "MyMaze" -> new MyMazeGenerator();
+                default -> new MyMazeGenerator();
+            };
+        }
+        else{
+            typeToGenerate = new MyMazeGenerator();
+        }
         this.mymaze= typeToGenerate.generate(row,col);
         this.mymaze.print();
         this.searchable = new SearchableMaze(mymaze);

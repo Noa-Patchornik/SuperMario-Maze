@@ -24,6 +24,11 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
     StringProperty imageFileNameSolveMaze = new SimpleStringProperty();
+    SimpleStringProperty imageFileNameWinning = new SimpleStringProperty();
+
+    public String getImageFileNameWinning() {
+        return imageFileNameWinning.get();
+    }
 
     public String getImageFileNameSolveMaze() {
         return imageFileNameSolveMaze.get();
@@ -56,15 +61,6 @@ public class MazeDisplayer extends Canvas {
     public int getCol_player() {
         return col_player;
     }
-
-    public void set_player_position(int row, int col){
-        this.row_player = row;
-        this.col_player = col;
-
-        draw();
-
-    }
-
 
     /**
      * draw the maze, update the start position of the player
@@ -99,7 +95,6 @@ public class MazeDisplayer extends Canvas {
             //Draw Maze
             Image wallImage = null;
             try {
-
                 wallImage = new Image(new FileInputStream(getImageFileNameWall()));
             } catch (FileNotFoundException e) {
                 System.out.println("There is no file....");
@@ -165,4 +160,5 @@ public class MazeDisplayer extends Canvas {
         draw();
 
     }
+
 }
