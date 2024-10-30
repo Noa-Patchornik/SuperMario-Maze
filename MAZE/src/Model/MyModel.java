@@ -1,8 +1,10 @@
 package Model;
 
+import Server.Configurations;
 import algorithms.mazeGenerators.*;
 import algorithms.search.ISearchable;
 import algorithms.search.SearchableMaze;
+import algorithms.search.Solution;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -15,6 +17,7 @@ public class MyModel extends Observable implements IModel{
     private int colChar;
     private ISearchable searchable;
     private Maze mymaze;
+    private Solution solution;
 
 
     public MyModel() {
@@ -92,13 +95,12 @@ public class MyModel extends Observable implements IModel{
     @Override
     public void solveMaze(int[][] maze) {
         //Solving maze
-        setChanged();
-        notifyObservers();
+
     }
 
     @Override
-    public void getSolution() {
-        //return this.solution;
+    public Solution getSolution() {
+        return this.solution;
     }
 
     /**
@@ -110,21 +112,27 @@ public class MyModel extends Observable implements IModel{
      */
     public ISearchable generateRandomMaze(int row, int col,String selectedSearchable)
     {
-        AMazeGenerator typeToGenerate ;
-                this.mymaze = new Maze(row,col);
-        if(selectedSearchable!=null) {
-            typeToGenerate = switch (selectedSearchable) {
-                case "simpleMaze" -> new SimpleMazeGenerator();
-                case "emptyMaze" -> new EmptyMazeGenerator();
-                case "MyMaze" -> new MyMazeGenerator();
-                default -> new MyMazeGenerator();
-            };
-        }
-        else{
-            typeToGenerate = new MyMazeGenerator();
-        }
-        this.mymaze= typeToGenerate.generate(row,col);
-        this.mymaze.print();
+//        AMazeGenerator typeToGenerate ;
+//                this.mymaze = new Maze(row,col);
+//        if(selectedSearchable!=null) {
+//            typeToGenerate = switch (selectedSearchable) {
+//                case "simpleMaze" -> new SimpleMazeGenerator();
+//                case "emptyMaze" -> new EmptyMazeGenerator();
+//                case "MyMaze" -> new MyMazeGenerator();
+//                default -> new MyMazeGenerator();
+//            };
+//        }
+//        else{
+//            typeToGenerate = new MyMazeGenerator();
+//        }
+
+        //update the configuration file with the selected value from the client
+        Configurations con = Configurations.getInstance();
+        con.setProp("mazeGeneratingAlgorithm", selectedSearchable);
+        //using the client server from part 2 to generate the maze
+        MyModelServerClient myModelServerClient = new MyModelServerClient();
+        myModelServerClient.ServerGenerateMaze(row,col);
+        this.mymaze = myModelServerClient.mymaze;
         this.searchable = new SearchableMaze(mymaze);
         this.maze = mymaze.getMaze();
         this.rowChar=this.mymaze.getStartPosition().getRowIndex();
