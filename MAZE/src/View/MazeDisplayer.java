@@ -1,15 +1,12 @@
 package View;
 
-import Model.MyModel;
-import ViewModel.MyViewModel;
+import algorithms.mazeGenerators.Maze;
 import algorithms.search.ISearchable;
 import algorithms.search.SearchableMaze;
-import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -18,58 +15,34 @@ import java.io.FileNotFoundException;
 
 public class MazeDisplayer extends Canvas {
 
+    private int [][] maze;
+    private ISearchable searchable;
+    private Maze myMaze;
+    private int row_player =0;
+    private int col_player =0;
+
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
-    StringProperty imageFileNameWinner = new SimpleStringProperty();
-    //for the position of the player
-    private int playerRow = 0;
-    private int playerCol = 0;
-    //get maze from one of the algorithms in part 1 of the project
-    private ISearchable maze;
-    public MyViewModel myViewModle = new MyViewModel(new MyModel());
-    GraphicsContext graphicsContext = getGraphicsContext2D();
-    private Solution solution;
-    double cellHeight=0;
-    double cellWidth=0;
-    double canvasHeight=0;
-    double canvasWidth=0;
-    private int PositionR;
-    private int PositionC;
+    StringProperty imageFileNameSolveMaze = new SimpleStringProperty();
 
-
-    public int getPlayerRow() {
-        return playerRow;
+    public String getImageFileNameSolveMaze() {
+        return imageFileNameSolveMaze.get();
     }
 
-    public int getPlayerCol() {
-        return playerCol;
+    public void setImageFileNameSolveMaze(String imageFileNameSolveMaze) {
+        this.imageFileNameSolveMaze.set(imageFileNameSolveMaze);
     }
-
-    public void setPlayerPosition(int row, int col) {
-        this.playerRow = row;
-        this.playerCol = col;
-        draw();
-    }
-
-    public String getImageFileNameWinner() {
-        return imageFileNameWinner.get();
-    }
-
 
     public String getImageFileNameWall() {
         return imageFileNameWall.get();
-    }
-
-    public String getImageFileNamePlayer() {
-        return imageFileNamePlayer.get();
     }
 
     public void setImageFileNameWall(String imageFileNameWall) {
         this.imageFileNameWall.set(imageFileNameWall);
     }
 
-    public void setImageFileNameWinner(String imageFileNameWinner) {
-        this.imageFileNameWinner.set(imageFileNameWinner);
+    public String getImageFileNamePlayer() {
+        return imageFileNamePlayer.get();
     }
 
     public void setImageFileNamePlayer(String imageFileNamePlayer) {
@@ -77,57 +50,111 @@ public class MazeDisplayer extends Canvas {
     }
 
 
-    public void drawMaze(ISearchable maze) {
-        this.maze = maze;
+
+
+    public int getRow_player() {
+        return row_player;
+    }
+
+    public int getCol_player() {
+        return col_player;
+    }
+
+    public void set_player_position(int row, int col){
+        this.row_player = row;
+        this.col_player = col;
+
+        draw();
+
+    }
+
+
+
+
+    public void drawMaze(ISearchable searchable)
+    {
+        this.searchable = searchable;
+        this.myMaze = ((SearchableMaze) searchable).getOrigionMaze();
+        this.maze = this.myMaze.getMaze();
+        this.row_player = this.myMaze.getStartPosition().getRowIndex();
+        this.col_player = this.myMaze.getStartPosition().getColumnIndex();
         draw();
     }
 
-    private void draw() {
-        if(maze != null){
-            //the size od the canvas
+    public void draw()
+    {
+        if( maze!=null) {
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
-            //the size of the maze
-            int rows = ((SearchableMaze)maze).getOrigionMaze().getRows();
-            int cols = ((SearchableMaze)maze).getOrigionMaze().getCols();
-            //the size of each cell in the displayer
-            this.cellHeight = canvasHeight / rows;
-            this.cellWidth = canvasWidth / cols;
+            int row = maze.length;
+            int col = maze[0].length;
+            double cellHeight = canvasHeight / row;
+            double cellWidth = canvasWidth / col;
+            GraphicsContext graphicsContext = getGraphicsContext2D();
+            graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
+            graphicsContext.setFill(Color.RED);
+            double w, h;
+            //Draw Maze
+            Image wallImage = null;
+            try {
 
-            //clear the canvas:
-            this.graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
-            //draw the walls of the maze
-            myViewModle.drawMazeWalls(this.maze,graphicsContext,cellHeight,cellWidth,getImageFileNameWall(),canvasHeight,canvasWidth);
-            //draw the character of the maze
-            //myViewModle.drawTmp(graphicsContext,cellHeight,cellWidth,((SearchableMaze)maze).getOrigionMaze().getGoalPosition().getRowIndex(),((SearchableMaze)maze).getOrigionMaze().getGoalPosition().getColumnIndex(),getImageFileNameGoal(),canvasHeight,canvasWidth);
-            //myViewModle.drawTmp(graphicsContext,cellHeight,cellWidth,((SearchableMaze)maze).getOrigionMaze().getStartPosition().getRowIndex(),((SearchableMaze)maze).getOrigionMaze().getStartPosition().getColumnIndex(),getImageFileNameInit(),canvasHeight,canvasWidth);
-            myViewModle.drawTmp(graphicsContext,cellHeight,cellWidth,this.PositionR,this.PositionC,getImageFileNamePlayer(),canvasHeight,canvasWidth);
+                wallImage = new Image(new FileInputStream(getImageFileNameWall()));
+            } catch (FileNotFoundException e) {
+                System.out.println("There is no file....");
+            }
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+
+                    if (maze[i][j] == 1) // Wall
+                    {
+                        h = i * cellHeight;
+                        w = j * cellWidth;
+                        if (wallImage == null) {
+
+                            graphicsContext.fillRect(w, h, cellWidth, cellHeight);
+                        } else {
+
+                            graphicsContext.drawImage(wallImage, w, h, cellWidth, cellHeight);
+                        }
+                    }
+
+                }
+            }
+
+            //draw the player image
+            double h_player = getRow_player() * cellHeight;
+            double w_player = getCol_player() * cellWidth;
+            Image playerImage = null;
+            try {
+                playerImage = new Image(new FileInputStream(getImageFileNamePlayer()));
+            } catch (FileNotFoundException e) {
+                System.out.println("There is no Image player....");
+            }
+            graphicsContext.drawImage(playerImage, w_player, h_player, cellWidth, cellHeight);
+
+            //draw the princess image
+            int goalRow = this.searchable.getGoalState().getR();
+            int goalCol = this.searchable.getGoalState().getC();
+            double h_princes = goalRow * cellHeight;
+            double w_princes = goalCol * cellWidth;
+            Image princesImage = null;
+            try {
+                princesImage = new Image(new FileInputStream(getImageFileNameSolveMaze()));
+            } catch (FileNotFoundException e) {
+                System.out.println("There is no Image for solving");
+            }
+            graphicsContext.drawImage(princesImage, w_princes, h_princes, cellWidth, cellHeight);
+
+            graphicsContext.setStroke(Color.BLACK); // צבע המסגרת
+            graphicsContext.setLineWidth(10); // עובי המסגרת
+            graphicsContext.strokeRect(0, 0, this.getWidth(), this.getHeight()); // ציור המסגרת מסביב למבוך
         }
     }
 
-    private String getImageFileNameInit() {
-        return imageFileNamePlayer.get();
-    }
-
-    private String getImageFileNameGoal() {
-        return imageFileNameWinner.get();
-    }
-
-//    private String getImageFileNameWall() {
-//        return imageFileNameWall.get();
-//    }
-//    private String
-
-
-    public void setMaze(ISearchable searchable) {
-        this.maze = searchable;
-        this.PositionR = ((SearchableMaze)maze).getOrigionMaze().getStartPosition().getRowIndex();
-        this.PositionC = ((SearchableMaze)maze).getOrigionMaze().getStartPosition().getColumnIndex();
-
-    }
-
-    public void setSolution(Solution solution) {
-        this.solution = solution;
+    public void setPlayerPosition(int row, int col) {
+        this.row_player = row;
+        this.col_player = col;
         draw();
+
     }
 }

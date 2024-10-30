@@ -50,5 +50,6 @@ public class Main extends Application {
         MyViewModel viewModel = new MyViewModel(model);
         MyViewController view = fxmlLoader.getController();
         view.setViewModel(viewModel);
+        viewModel.addObserver(view);
     }
 }
