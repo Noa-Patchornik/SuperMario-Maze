@@ -2,6 +2,7 @@ package View;
 
 import ViewModel.MyViewModel;
 import algorithms.search.ISearchable;
+import algorithms.search.Solution;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -50,6 +51,7 @@ public class MyViewController implements Initializable,Observer {
     String selectedValueSearchable;//the selected value of the generate maze
     String selectedValueSearching; //the selected solving strategy
     ISearchable searchable;
+    private Solution solution;
 
     /**
      * Initialize the application, creating the binding to the text boxes in the app and to the comboBox
@@ -110,7 +112,9 @@ public class MyViewController implements Initializable,Observer {
      */
     public void solveMaze()
     {
-        viewModel.solveMaze(this.maze);
+        this.solution = viewModel.solveMaze(this.searchable,this.selectedValueSearching);
+
+        this.viewModel.update(viewModel,"maze solved");
     }
 
     /**
@@ -162,6 +166,7 @@ public class MyViewController implements Initializable,Observer {
      * solving the maze
      */
     private void mazeSolved() {
+        mazeDisplayer.drawSolution(this.searchable,this.solution);
     }
 
     /**

@@ -101,7 +101,14 @@
    <center>
         <Pane BorderPane.alignment="CENTER">
             <children>
-                <MazeDisplayer fx:id="mazeDisplayer" height="400.0" imageFileNamePlayer="MAZE/resources/images/mario.jpg" imageFileNameSolveMaze="MAZE/resources/images/SolvedMaze.png" imageFileNameWall="MAZE/resources/images/wall.png" onKeyPressed="#keyPressed" width="400.0"/>
+                <MazeDisplayer fx:id="mazeDisplayer"
+                               height="400.0"
+                               imageFileNamePlayer="MAZE/resources/images/mario.jpg"
+                               imageFileNameSolveMaze="MAZE/resources/images/SolvedMaze.png"
+                               imageFileNameWall="MAZE/resources/images/wall.png"
+                               imageFileNameSolution="MAZE/resources/images/Solution.jpg"
+                               onKeyPressed="#keyPressed"
+                               width="400.0"/>
                 <MediaView fx:id="mediaView" fitWidth="400" fitHeight="300" layoutX="100" layoutY="100" preserveRatio="true"/>
             </children>
             <padding>

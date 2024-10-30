@@ -1,8 +1,7 @@
 package View;
 
 import algorithms.mazeGenerators.Maze;
-import algorithms.search.ISearchable;
-import algorithms.search.SearchableMaze;
+import algorithms.search.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.Canvas;
@@ -12,6 +11,7 @@ import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class MazeDisplayer extends Canvas {
 
@@ -24,10 +24,14 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageFileNameWall = new SimpleStringProperty();
     StringProperty imageFileNamePlayer = new SimpleStringProperty();
     StringProperty imageFileNameSolveMaze = new SimpleStringProperty();
-    SimpleStringProperty imageFileNameWinning = new SimpleStringProperty();
+    StringProperty imageFileNameSolution = new SimpleStringProperty();
 
-    public String getImageFileNameWinning() {
-        return imageFileNameWinning.get();
+    public String getImageFileNameSolution() {
+        return imageFileNameSolution.get();
+    }
+
+    public void setImageFileNameSolution(String imageFileNameSolution) {
+        this.imageFileNameSolution.set(imageFileNameSolution);
     }
 
     public String getImageFileNameSolveMaze() {
@@ -81,7 +85,7 @@ public class MazeDisplayer extends Canvas {
      */
     public void draw()
     {
-        if( maze!=null) {
+        if( maze !=null) {
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
             int row = maze.length;
@@ -160,5 +164,38 @@ public class MazeDisplayer extends Canvas {
         draw();
 
     }
+
+    public void drawSolution(ISearchable searchable, Solution solution) {
+        drawMaze(searchable);
+        double canvasHeight = getHeight();
+        double canvasWidth = getWidth();
+        int row = maze.length;
+        int col = maze[0].length;
+        double cellHeight = canvasHeight / row;
+        double cellWidth = canvasWidth / col;
+        GraphicsContext graphicsContext = getGraphicsContext2D();
+//        graphicsContext.clearRect(0, 0, canvasWidth, canvasHeight);
+        ArrayList<AState> solpath =  solution.getSolutionPath();
+        Image solutionPathImae = null;
+        try {
+            solutionPathImae = new Image(new FileInputStream(getImageFileNameSolution()));
+        } catch (FileNotFoundException e) {
+            System.out.println("There is no Image for solving");
+        }
+
+        for(int i=0; i<solpath.size(); i++){
+            int r = ((MazeState) solpath.get(i)).getR();
+            int c = ((MazeState) solpath.get(i)).getC();
+            if((r==this.searchable.getInitState().getR() && c==this.searchable.getInitState().getC() )||
+                    (r==this.searchable.getGoalState().getR() && c==this.searchable.getGoalState().getC())){
+                continue;
+            }
+            double x = c*cellWidth;
+            double y = r*cellHeight;
+            graphicsContext.drawImage(solutionPathImae, x, y, cellWidth, cellHeight);
+        }
+    }
+
+
 
 }

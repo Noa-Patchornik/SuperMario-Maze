@@ -90,12 +90,17 @@ public class MyModel extends Observable implements IModel{
 
     /**
      * solve the maze and update it
-     * @param maze
+     * @param
      */
     @Override
-    public void solveMaze(int[][] maze) {
+    public Solution solveMaze(ISearchable searchable,String selectedSearching) {
+        //update the configuration file with the selected value from the client
+        Configurations con = Configurations.getInstance();
+        con.setProp("mazeSearchingAlgorithm", selectedSearching);
         //Solving maze
-
+        MyModelServerClient myModelServerClient= new MyModelServerClient();
+        myModelServerClient.ServerSolvingMaze(searchable);
+        return myModelServerClient.solution;
     }
 
     @Override

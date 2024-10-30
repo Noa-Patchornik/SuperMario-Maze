@@ -12,6 +12,6 @@ public interface IModel {
     public int getRowChar();
     public int getColChar();
     public void assignObserver(Observer o);
-    public void solveMaze(int [][] maze);
+    public Solution solveMaze(ISearchable searchable, String str);
     public Solution getSolution();
 }

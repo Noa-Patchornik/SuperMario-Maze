@@ -2,12 +2,14 @@ package ViewModel;
 
 import Model.IModel;
 import algorithms.search.ISearchable;
+import algorithms.search.Solution;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.input.KeyEvent;
 
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -103,9 +105,9 @@ public class MyViewModel extends Observable implements Observer {
         notifyObservers("player moved");
     }
 
-    public void solveMaze(int [][] maze)
+    public Solution solveMaze(ISearchable iSearchable, String selectedSearchingValue)
     {
-        model.solveMaze(maze);
+       return model.solveMaze(iSearchable,selectedSearchingValue);
     }
 
     public void getSolution()

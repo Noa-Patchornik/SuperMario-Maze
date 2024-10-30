@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 public class MyModelServerClient {
 
     public Maze mymaze;
-    private Solution solution;
+    public Solution solution;
 
     /**
      * the function that generate the Maze using Server Client strategy to choose in runtime the type of generating
