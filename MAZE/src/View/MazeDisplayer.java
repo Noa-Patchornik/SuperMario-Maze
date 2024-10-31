@@ -26,6 +26,7 @@ public class MazeDisplayer extends Canvas {
     StringProperty imageFileNameSolveMaze = new SimpleStringProperty();
     StringProperty imageFileNameSolution = new SimpleStringProperty();
 
+
     public String getImageFileNameSolution() {
         return imageFileNameSolution.get();
     }
@@ -105,11 +106,10 @@ public class MazeDisplayer extends Canvas {
             }
             for (int i = 0; i < row; i++) {
                 for (int j = 0; j < col; j++) {
-
+                    h = i * cellHeight;
+                    w = j * cellWidth;
                     if (maze[i][j] == 1) // Wall
                     {
-                        h = i * cellHeight;
-                        w = j * cellWidth;
                         if (wallImage == null) {
 
                             graphicsContext.fillRect(w, h, cellWidth, cellHeight);
