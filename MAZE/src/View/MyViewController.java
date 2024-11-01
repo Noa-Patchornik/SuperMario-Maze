@@ -226,16 +226,16 @@ public class MyViewController implements Initializable,Observer {
      */
     @FXML
     public void AboutTheApp(ActionEvent actionEvent) {
-        showCustomAlert("לפניך אפליקציה ליצירת מבוכים ופתרונם מבוססת אלגוריתמים שונים. יש שימוש באסטרטגיית Strategy כדי לתמוך בבחירה בזמן ריצה של אלגוריתמים שונים.");
+        showCustomAlert("לפניך אפליקציה ליצירת מבוכים ופתרונם מבוססת אלגוריתמים שונים. יש שימוש באסטרטגיית Strategy כדי לתמוך בבחירה בזמן ריצה של אלגוריתמים שונים ליצירה של מבוכים ולפתרונם.");
     }
 
-//    /**
-//     * the function shows alert to the client with explanation of how the app is working and how to use it
-//     * @param actionEvent
-//     */
-//    public void Help(ActionEvent actionEvent) {
-//        showCustomAlert("לפנייך אפליקציה שיוצרת ופותרת מבוכים, המטרה הינה להגיע עם הדמות של מריו לדמות הנסיכה ולפתור את המבוך. ליצירת מבוך חדש לחץ על כתפתור הGENERATE, לפתירה של מבוך קיים לחץ על כפתור הSOLVE. בכדי לזוז השתמש בחצים של המקלדת");
-//    }
+    /**
+     * the function shows alert to the client with explanation of how the app is working and how to use it
+     * @param actionEvent
+     */
+    public void help(ActionEvent actionEvent) {
+        showCustomAlert("לפנייך משחק שיוצר ופותר מבוכים, המטרה היא להגיע עם הדמות של מריו לדמות הנסיכה ולפתור את המבוך. ליצירת מבוך חדש לחץ על כתפתור הGENERATE, לפתירה של המבוך קיים לחץ על כפתור הSOLVE. בכדי לזוז יש להסתכל בתמונה שמופיעה על המסך מימין למעלה");
+    }
 
     /**
      * custom alert function to make sure that the message fits into it
@@ -305,49 +305,49 @@ public class MyViewController implements Initializable,Observer {
         }
     }
 
-    public void showKeyboardInstructions() {
-        // Create an alert
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("How to Play");
-        alert.setHeaderText("Keyboard Controls");
-        // Get the absolute path of the project directory
-        String projectDir = System.getProperty("user.dir");
-        String imagePath = projectDir + "/MAZE/resources/images/moves.jpeg";
-        File imageFile = new File(imagePath);
-
-        // Check if the file exists in the first path; if not, try an alternative path
-        if (!imageFile.exists()) {
-            imagePath = projectDir + "/MAZE/images/moves.jpeg";
-            imageFile = new File(imagePath);
-        }
-        Image image=null;
-        if (imageFile.exists()) {
-            image = new Image(imageFile.toURI().toString());
-
-        } else {
-            System.out.println("Image file not found in both paths.");
-        }
-        // Display the image in your alert or wherever needed
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(200); // Adjust width as needed
-        imageView.setPreserveRatio(true);
-        // Add explanation text
-        Label instructions = new Label("Use the numbers on the keyboard to navigate the maze:\n"
-                + "• 8 number: to Move Up\n"
-                + "• 2 number: to Move Down\n"
-                + "• 4 number: to Move Left\n"
-                + "• 6 number: to Move Right\n"
-                + "• 7 number: to Move UP-Left\n"
-                + "• 9 number: to Move Up-Right\n"
-                + "• 1 number: to Move Down-Left\n"
-                + "• 3 number: to Move Down-Right\n");
-        // Add the image and instructions to the alert
-        VBox content = new VBox();
-        content.getChildren().addAll(instructions, imageView);
-        alert.getDialogPane().setContent(content);
-        // Display the alert
-        alert.showAndWait();
-    }
+//    public void showKeyboardInstructions() {
+//        // Create an alert
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("How to Play");
+//        alert.setHeaderText("Keyboard Controls");
+//        // Get the absolute path of the project directory
+//        String projectDir = System.getProperty("user.dir");
+//        String imagePath = projectDir + "/MAZE/resources/images/moves.jpeg";
+//        File imageFile = new File(imagePath);
+//
+//        // Check if the file exists in the first path; if not, try an alternative path
+//        if (!imageFile.exists()) {
+//            imagePath = projectDir + "/MAZE/images/moves.jpeg";
+//            imageFile = new File(imagePath);
+//        }
+//        Image image=null;
+//        if (imageFile.exists()) {
+//            image = new Image(imageFile.toURI().toString());
+//
+//        } else {
+//            System.out.println("Image file not found in both paths.");
+//        }
+//        // Display the image in your alert or wherever needed
+//        ImageView imageView = new ImageView(image);
+//        imageView.setFitWidth(200); // Adjust width as needed
+//        imageView.setPreserveRatio(true);
+//        // Add explanation text
+//        Label instructions = new Label("Use the numbers on the keyboard to navigate the maze:\n"
+//                + "• 8 number: to Move Up\n"
+//                + "• 2 number: to Move Down\n"
+//                + "• 4 number: to Move Left\n"
+//                + "• 6 number: to Move Right\n"
+//                + "• 7 number: to Move UP-Left\n"
+//                + "• 9 number: to Move Up-Right\n"
+//                + "• 1 number: to Move Down-Left\n"
+//                + "• 3 number: to Move Down-Right\n");
+//        // Add the image and instructions to the alert
+//        VBox content = new VBox();
+//        content.getChildren().addAll(instructions, imageView);
+//        alert.getDialogPane().setContent(content);
+//        // Display the alert
+//        alert.showAndWait();
+//    }
 
 }
 

@@ -86,7 +86,7 @@
                     </Menu>
                     <Menu mnemonicParsing="false" text="Help">
                         <items>
-                            <MenuItem mnemonicParsing="false" text="Help" onAction="#showKeyboardInstructions" />
+                            <MenuItem mnemonicParsing="false" text="Help" onAction="#help" />
                         </items>
                     </Menu>
                     <Menu mnemonicParsing="false" text="About">

@@ -40,14 +40,22 @@ public class MyModel extends Observable implements IModel{
      */
     public void updateCharacterLocation(int direction)
     {
-        /*  direction = 1 -> Up
-            direction = 2 -> Down
-            direction = 3 -> Left
-            direction = 4 -> Right  */
+        /*
+        direction = 1 -> Move Down-Left (row+1, col-1)
+        direction = 2 -> Move Down (row+1,col)
+        direction = 3 -> Move Down-Right (row+1,col+1)
+        direction = 4 -> Move left (row, col-1)
+        direction = 6 -> Move Right (row, col+1)
+        direction = 7 -> Move UP-Left (row-1, col-1)
+        direction = 8 -> Move Up (row-1 , col)
+        direction = 9 -> Move Up-Right (row-1, col+1)
+         */
+        //in each case checking if the move is legal (in the bounds of the maze and not wall)
         switch (direction) {
-            case 1: // Up
-                if (rowChar > 0 && maze[rowChar - 1][colChar] != 1) {
-                    rowChar--;
+            case 1: // Down-Left
+                if (rowChar < maze.length - 1 && colChar > 0 && maze[rowChar + 1][colChar-1] != 1) {
+                    rowChar++;
+                    colChar--;
                 }
                 break;
             case 2: // Down
@@ -55,15 +63,39 @@ public class MyModel extends Observable implements IModel{
                     rowChar++;
                 }
                 break;
-            case 3: // Left
+            case 3: // Down-Right
+                if (rowChar < maze.length - 1 && colChar < maze[0].length - 1 && maze[rowChar + 1][colChar+1] != 1) {
+                    rowChar++;
+                    colChar++;
+                }
+                break;
+            case 4: // left
                 if (colChar > 0 && maze[rowChar][colChar - 1] != 1) {
                     colChar--;
                 }
                 break;
-            case 4: // Right
+            case 6: // Right
                 if (colChar < maze[0].length - 1 && maze[rowChar][colChar + 1] != 1) {
                     colChar++;
                 }
+                break;
+            case 7: // UP-Left
+                if (rowChar > 0 && colChar > 0 && maze[rowChar - 1][colChar-1] != 1) {
+                    rowChar--;
+                    colChar--;
+                }
+                break;
+            case 8: // Up
+                if (rowChar > 0 && maze[rowChar - 1][colChar] != 1) {
+                    rowChar--;
+                }
+                break;
+            case 9: // Up-Right
+                if (rowChar > 0 && colChar < maze[0].length - 1 && maze[rowChar - 1][colChar + 1] != 1) {
+                    rowChar--;
+                    colChar++;
+                }
+                break;
         }
         if(rowChar== this.searchable.getGoalState().getR() && colChar == this.searchable.getGoalState().getC()){
             setChanged();

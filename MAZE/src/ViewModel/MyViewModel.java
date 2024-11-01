@@ -82,22 +82,22 @@ public class MyViewModel extends Observable implements Observer {
      */
     public void moveCharacter(KeyEvent keyEvent)
     {
-        int direction = -1;
-        switch (keyEvent.getCode()){
-            case UP:
-                direction = 1;
-                break;
-            case DOWN:
-                direction = 2;
-                break;
-            case LEFT:
-                direction = 3;
-                break;
-            case RIGHT:
-                direction = 4;
-                break;
+        int direction;
+        if (keyEvent.getCode().isDigitKey()) {
+            // Get the numeric character from the key event text
+            String keyText = keyEvent.getText();
+            try {
+                // Parse the key text to an integer direction
+                direction = Integer.parseInt(keyText);
+            } catch (NumberFormatException e) {
+                return; // exit if parsing fails
+            }
+        } else {
+            return;
         }
-
+        if (direction < 1 || direction > 9) {
+            return;
+        }
         model.updateCharacterLocation(direction);
         setPlayerRow(model.getRowChar());
         setPlayerCol(model.getColChar());
