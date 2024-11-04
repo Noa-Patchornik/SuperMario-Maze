@@ -102,6 +102,9 @@ public class MyViewController implements Initializable,Observer {
      */
     public void generateMaze()
     {
+//        myComboBox.setOnAction(event -> {
+//            this.selectedValueSearchable = myComboBox.getSelectionModel().getSelectedItem();
+//        });
         int rows = Integer.valueOf(textField_mazeRows.getText());
         int cols = Integer.valueOf(textField_mazeColumns.getText());
         this.searchable = viewModel.generateMaze(rows,cols,selectedValueSearchable);
@@ -114,8 +117,10 @@ public class MyViewController implements Initializable,Observer {
      */
     public void solveMaze()
     {
+        myComboBox1.setOnAction(event -> {
+            this.selectedValueSearching = myComboBox1.getSelectionModel().getSelectedItem();
+        });
         this.solution = viewModel.solveMaze(this.searchable,this.selectedValueSearching);
-
         this.viewModel.update(viewModel,"maze solved");
     }
 
@@ -262,8 +267,9 @@ public class MyViewController implements Initializable,Observer {
     public void generateNewMaze(ActionEvent actionEvent) {
         // Stop any playing video first
         stopWinAnimation();
-        this.selectedValueSearchable = "MyMaze";
-        this.selectedValueSearching = "Depth First Search";
+        myComboBox.setOnAction(event -> {
+            this.selectedValueSearchable = myComboBox.getSelectionModel().getSelectedItem();
+        });
         generateMaze();
     }
 

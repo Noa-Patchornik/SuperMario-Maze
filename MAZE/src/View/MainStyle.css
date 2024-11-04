@@ -1,21 +1,52 @@
 .root {
-    -fx-background-color: bisque;
+    -fx-background-color: BISQUE;
 }
 
 Button {
-    -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
+    -fx-text-fill: black;
+    -fx-font-family: "Press Start 2P", sans-serif;
     -fx-font-weight: bold;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-background-color: 	LIGHTCORAL;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
 }
 
-Button:hover {
-    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius: 3px, 3px, 2px, 1px;
-    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
-    -fx-text-fill: -fx-text-base-color;
-    -fx-alignment: CENTER;
-    -fx-content-display: LEFT;
+.combo-box {
+    -fx-background-color: LIGHTCORAL; /* Set ComboBox background color to yellow */
+    -fx-font-family: "Press Start 2P", sans-serif; /* Use custom font style */
+    -fx-text-fill: black; /* Set text color to black */
+    -fx-border-color: #000000; /* Set border color to black */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.5, 0, 0); /* Add a soft shadow effect */
+}
+
+.menu-bar {
+    -fx-background-color: transparent; /* Make the menu bar background transparent */
+}
+
+.menu {
+    -fx-text-fill: black; /* Set the menu text color to black */
+    -fx-font-family: "Press Start 2P", sans-serif; /* Use custom font style */
+    -fx-font-size: 14px; /* Set the font size to 14 pixels */
+    -fx-font-weight: bold;
+}
+
+/* Items inside the ComboBox dropdown list */
+.combo-box .list-cell {
+    -fx-background-color: LIGHTCORAL; /* Set background color to a lighter yellow for better contrast */
+    -fx-text-fill: black; /* Set text color to black */
+    -fx-font-family: "Press Start 2P", sans-serif; /* Use custom font style */
+    -fx-font-weight: bold;
+}
+
+/* Style for the selected item in the ComboBox */
+.combo-box .list-cell:selected {
+    -fx-background-color: LIGHTCORAL; /* Set background color for selected item to a lighter yellow */
+    -fx-text-fill: black; /* Set text color to black */
+    -fx-font-weight: bold;
+}
+
+.label {
+    -fx-font-family: "Press Start 2P", sans-serif; /* Use custom font style */
+    -fx-text-fill: black; /* Set label text color to a Pacman-style yellow */
+    -fx-font-weight: bold;
 }

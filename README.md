@@ -1,5 +1,5 @@
 Super Mario Maze Generation and Solver Project
-![Super Mario Maze GUI](resources/application.png)
+![Super Mario Maze GUI](MAZE/resources/application.png)
 
 Overview
 This project is a Java-based application that generates, displays, compresses, and solves mazes, styled with Super Mario aesthetics. The design features a colorful, retro-inspired GUI, engaging animations, and interactive functionality.
@@ -9,7 +9,7 @@ Maze Generation: Supports multiple algorithms for creating complex mazes.
 Maze Solving: Implements search algorithms to find optimal paths.
 Compression and Decompression: Efficiently compress and decompress mazes for storage.
 Graphical User Interface (GUI): An interactive Super Mario-themed display for maze generation and solving.
-Custom Styling: Incorporates Super Mario colors, icons, and elements for a fun and nostalgic experience.
+Custom Styling: Incorporates Super Mario icons, and elements for a fun and nostalgic experience.
 
 Project Structure
 The project is organized into the following components:
@@ -44,7 +44,7 @@ ServerStrategySolveSearchProblem.java: Server-side maze-solving logic.
 GUI Components
 MazeDisplayer.java: Custom component that renders the maze visually.
 MyViewController.java / MyView.fxml / MainStyle.css: Defines the graphical user interface, styled to look like classic Super Mario.
-CSS Styling: Elements are themed with Mario colors (e.g., blue, red, yellow), fonts, and icons for a playful appearance.
+CSS Styling: Icons from the Super-Mario game for a playful appearance.
 
 Utility and Configuration
 Configurations.java: Manages configurations across the application.
